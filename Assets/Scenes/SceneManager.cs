@@ -40,6 +40,7 @@ public class SceneManager : MonoBehaviour {
 
             // Pull out the file name base to get the associated text file of dialogues
             string fileNameBase = f.Name.Split(".")[1];
+            Debug.Log(fileNameBase);
 
             // TODO: Do the same thing for the voice lines
 
