@@ -103,7 +103,7 @@ public class SceneManager : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         // On space keypress, proceed to next scene element
-        if (Input.GetKeyDown("space")) {
+        if (Input.GetKeyDown("space") || Input.GetMouseButtonDown(0)) {
             string nextText = currScene.NextDialogue();
             if (nextText == null) {
                 currSceneIdx += 1;
