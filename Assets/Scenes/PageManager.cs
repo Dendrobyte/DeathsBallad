@@ -13,6 +13,8 @@ public class SceneObj {
     public string imgPath;
     public List<string> dialogues = new List<string>();
     private int currDialogueIdx;
+    public bool hasDialogueEnded = false;
+    public bool hasEvent = false;
 
     public SceneObj(string imgPath) {
         this.imgPath = imgPath;
@@ -22,6 +24,7 @@ public class SceneObj {
     public string NextDialogue() {
         currDialogueIdx += 1;
         if (currDialogueIdx >= dialogues.Count) {
+            hasDialogueEnded = true;
             return null; // Indicates switch to next scene
         } else {
             return dialogues[currDialogueIdx];
@@ -29,14 +32,17 @@ public class SceneObj {
     }
 }
 
-public class SceneManager : MonoBehaviour {
+public class PageManager : MonoBehaviour {
+    public GameObject minigameOverlay;
     public GameObject backgroundGameObject;
     public SpriteRenderer backgroundSpriteRenderer;
     public TextMeshProUGUI dialogueText;
+    public SpriteRenderer dialogueBg;
 
     public List<SceneObj> allScenes = new List<SceneObj>();
     public SceneObj currScene = null;
     public int currSceneIdx = 0;
+    
 
     // Set up a scene to be the current scene by updating background image
     // Such as startup or when passed in on the last dialogue of a scene
@@ -45,9 +51,6 @@ public class SceneManager : MonoBehaviour {
         Texture2D textureLoad = new Texture2D(2, 2);
         textureLoad.LoadImage(fileData);
         backgroundSpriteRenderer.sprite = Sprite.Create(textureLoad, new Rect(0, 0, textureLoad.width, textureLoad.height), new UnityEngine.Vector2(0.5f, 0.5f));
-
-        // TODO: If this is scene 3, let's load the fishing minigame
-        //       Always hold on to the last scene or whatever though
 
         currScene = scene;
         SetCurrentDialogue(currScene.dialogues[0]);
@@ -90,6 +93,11 @@ public class SceneManager : MonoBehaviour {
 
             // TODO: Do the same thing for the voice lines
             
+            // NOTE: This is just for the demo purposes, but we'd need some other flag for scenes that trigger actions
+            // Many solutions to do that come to mind, but later (if ever)
+            if (fileNameBase == "ballad_3") {
+                newScene.hasEvent = true;
+            }
             allScenes.Add(newScene);
 		}
         Debug.Log("-+ Scene manager setup complete. First scene loading. +-");
@@ -97,25 +105,57 @@ public class SceneManager : MonoBehaviour {
         SceneObj firstScene = allScenes[0];
         SetCurrentScene(firstScene);
 
+        Cursor.visible = false;
         Debug.Log("-+ Setup complete! Game should have started. +-");
+        // InitFishingMinigame(); // -.- This is why we use scenes
     }
 
     // Update is called once per frame
     void Update() {
-        // On space keypress, proceed to next scene element
-        if (Input.GetKeyDown("space") || Input.GetMouseButtonDown(0)) {
-            string nextText = currScene.NextDialogue();
-            if (nextText == null) {
-                currSceneIdx += 1;
-                if (currSceneIdx >= allScenes.Count) {
-                    SetCurrentDialogue("GAME OVER.");
+        // Check if the page we are on has an event ongoing. If not, we continue VN style
+        // Kind of cheesing this because I'm just going to load in other elements now
+        if (currScene.hasEvent && currScene.hasDialogueEnded) {
+            // Do nothing :) Let the other loaded object/minigame handle things and prevent below continuations
+        } else {
+            // On space keypress, proceed to next page/dialogue
+            if (Input.GetKeyDown("space") || Input.GetMouseButtonDown(0)) {
+                string nextText = currScene.NextDialogue();
+                if (nextText == null) {
+                    currSceneIdx += 1;
+                    if (currSceneIdx >= allScenes.Count) {
+                        SetCurrentDialogue("GAME OVER.");
+                    } else {
+                        // Check if we have an event to trigger
+                        if (currScene.hasEvent) {
+                            // TODO: Trigger scene switch
+                            Debug.Log("Triggering scene switch!");
+                            InitFishingMinigame();
+
+                            /* And then once that is done, e.g. a soul is obtained, we trigger the next scene stuff as below
+                            * Assumptions:
+                            * - The next scene will not also have an event
+                            * - There will be a next scene definitively
+                            */
+                            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                        } else {
+                            SceneObj nextScene = allScenes[currSceneIdx];
+                            SetCurrentScene(nextScene);
+                        }
+
+                    }
                 } else {
-                    SceneObj nextScene = allScenes[currSceneIdx];
-                    SetCurrentScene(nextScene);
+                    SetCurrentDialogue(nextText);
                 }
-            } else {
-                SetCurrentDialogue(nextText);
             }
         }
+    }
+
+    // Cheesy way of loading/unloading necessary elements for the fishing minigame
+    // Things aren't set up to transfer across actual Scenes but that should be done in the future!
+    public void InitFishingMinigame() {
+        dialogueBg.enabled = false;
+        dialogueText.enabled = false;
+        minigameOverlay = Instantiate(minigameOverlay);
+        
     }
 }

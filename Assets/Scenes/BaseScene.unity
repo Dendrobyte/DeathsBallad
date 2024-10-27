@@ -181,7 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0e0014e3febf7e54f94f7c3e70ee3a36, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 48233bdf351a52e488cc02c0e513105c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -219,9 +219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e18c0be27f624ed0af2be63ec18e1f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minigameOverlay: {fileID: 0}
   backgroundGameObject: {fileID: 0}
   backgroundSpriteRenderer: {fileID: 0}
   dialogueText: {fileID: 0}
+  dialogueBg: {fileID: 0}
   currSceneIdx: 0
 --- !u!1 &519420028
 GameObject:
@@ -521,7 +523,7 @@ GameObject:
   - component: {fileID: 1130349809}
   - component: {fileID: 1130349810}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: PageManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,9 +556,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e18c0be27f624ed0af2be63ec18e1f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minigameOverlay: {fileID: 5646833098001361331, guid: d91366daa1e2b4403bd2f8e80243d87a, type: 3}
   backgroundGameObject: {fileID: 0}
   backgroundSpriteRenderer: {fileID: 0}
   dialogueText: {fileID: 1928426614}
+  dialogueBg: {fileID: 1445611093}
   currSceneIdx: 0
 --- !u!1 &1445611092
 GameObject:
