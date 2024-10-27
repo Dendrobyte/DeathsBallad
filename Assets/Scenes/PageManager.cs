@@ -156,6 +156,13 @@ public class PageManager : MonoBehaviour {
         dialogueBg.enabled = false;
         dialogueText.enabled = false;
         minigameOverlay = Instantiate(minigameOverlay);
-        
+    }
+
+    public void FinFishingMinigame() {
+        Destroy(minigameOverlay);
+        dialogueBg.enabled = true;
+        dialogueText.enabled = true;
+        SceneObj nextScene = allScenes[currSceneIdx];
+        SetCurrentScene(nextScene);
     }
 }

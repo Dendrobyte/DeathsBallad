@@ -10,17 +10,15 @@ public class SoulMovement : MonoBehaviour {
     public int yDir = 1;
     public Vector3 direction = new Vector3(.5f, .5f, 0f);
 
-    public bool isMoving = true;
+    public bool collided = false;
+
     void Start() {
         Debug.Log("-+ Soul spawned in! +-");
     }
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetKeyDown("space")) {
-            isMoving = false;
-        }
-        if (isMoving) {
+        if (!collided) {
             transform.position += Vector3.up * speed * yDir * Time.deltaTime;
             transform.position += Vector3.right * speed * xDir * Time.deltaTime;
             
@@ -34,6 +32,14 @@ public class SoulMovement : MonoBehaviour {
                 xDir *= -1;
             }
         }
-        
     }
+
+    void OnTriggerEnter2D(UnityEngine.Collider2D coll) {
+        collided = true;
+        
+        // Continue on in the main scene
+        // This feels wrong but hey it works
+        GameObject.Find("PageManager").GetComponent<PageManager>().FinFishingMinigame();
+    }
+
 }

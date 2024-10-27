@@ -15,7 +15,7 @@ public class BaitMovement : MonoBehaviour {
     void Update() {
 
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 1;
+        mousePos.z = 0;
 
         transform.position = mousePos;
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class MinigameManager : MonoBehaviour {
     public GameObject soul;
     public GameObject bait;
+    
 
     // Start is called before the first frame update
     void Start() {
@@ -13,6 +14,5 @@ public class MinigameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        
     }
 }
