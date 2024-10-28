@@ -71,15 +71,18 @@ public class PageManager : MonoBehaviour {
 
         Debug.Log("-+ Obtained sprite renderer. Initializing and loading scenes... -+");
         DirectoryInfo dir = new DirectoryInfo("Assets/Frames");
-		FileInfo[] info = dir.GetFiles("*.jpg");
-		foreach (FileInfo f in info) 
+
+        string[] fileNames = {"ballad_1.jpg", "ballad_2.jpg", "ballad_3.jpg", "ballad_4.jpg"};
+		foreach (string fName in fileNames) 
 		{ 
             // Pull out the file path for SpriteRenderer and initialize object
-            string fileNameFull = f.FullName;
+            FileInfo imgFile = new FileInfo("./Assets/Frames/" + fName);
+            string fileNameFull = imgFile.FullName;
             SceneObj newScene = new SceneObj(fileNameFull);
 
             // Pull out the file name base to get the associated text file of dialogues
-            string fileNameBase = f.Name.Split(".")[0];
+            // Leftover artifact when I was iterating over directory
+            string fileNameBase = fName.Split(".")[0];
             // TODO: Better way from directory object above? Or put these elsewhere for organization anyway?
             FileInfo dialogueText = new FileInfo("./Assets/Frames/" + fileNameBase + ".txt");
             StreamReader reader = dialogueText.OpenText();
