@@ -5,10 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
 using UnityEngine;
-
 public class SceneObj {
     public string imgPath;
     public List<string> dialogues = new List<string>();
@@ -107,7 +104,6 @@ public class PageManager : MonoBehaviour {
 
         Cursor.visible = false;
         Debug.Log("-+ Setup complete! Game should have started. +-");
-        // InitFishingMinigame(); // -.- This is why we use scenes
     }
 
     // Update is called once per frame
@@ -123,7 +119,8 @@ public class PageManager : MonoBehaviour {
                 if (nextText == null) {
                     currSceneIdx += 1;
                     if (currSceneIdx >= allScenes.Count) {
-                        SetCurrentDialogue("GAME OVER.");
+                        SetCurrentDialogue("GAME OVER.\nClick exit to exit.");
+                        Cursor.visible = true;
                     } else {
                         // Check if we have an event to trigger
                         if (currScene.hasEvent) {

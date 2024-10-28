@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.4543, y: 0.1845, z: -0.01453566}
-  m_LocalScale: {x: 1.0672855, y: 0.9354954, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 73532164750928497}
@@ -275,12 +275,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70643676f16b4443690ce65d025563c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 4
   xDir: -1
   yDir: 1
   direction: {x: 0.5, y: 0.5, z: 0}
   collided: 0
-  boxCollider: {fileID: 7172906376206103715}
 --- !u!50 &1814530239557329719
 Rigidbody2D:
   serializedVersion: 4

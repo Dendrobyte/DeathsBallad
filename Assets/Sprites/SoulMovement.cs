@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class SoulMovement : MonoBehaviour {
     // Start is called before the first frame update
-    [Range(0, 12)]
-    public int speed = 1;
+    public int speed = 8;
     public int xDir = -1;
     public int yDir = 1;
     public Vector3 direction = new Vector3(.5f, .5f, 0f);
