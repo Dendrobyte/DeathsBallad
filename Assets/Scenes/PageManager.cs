@@ -39,15 +39,16 @@ public class PageManager : MonoBehaviour {
     public List<SceneObj> allScenes = new List<SceneObj>();
     public SceneObj currScene = null;
     public int currSceneIdx = 0;
-    
+
 
     // Set up a scene to be the current scene by updating background image
     // Such as startup or when passed in on the last dialogue of a scene
     public void SetCurrentScene(SceneObj scene) {
-        byte[] fileData = File.ReadAllBytes(scene.imgPath);
-        Texture2D textureLoad = new Texture2D(2, 2);
-        textureLoad.LoadImage(fileData);
-        backgroundSpriteRenderer.sprite = Sprite.Create(textureLoad, new Rect(0, 0, textureLoad.width, textureLoad.height), new UnityEngine.Vector2(0.5f, 0.5f));
+        Texture2D img = Resources.Load<Texture2D>("Frames/" + scene.imgPath);
+        // byte[] fileData = File.ReadAllBytes(scene.imgPath);
+        // Texture2D textureLoad = new Texture2D(2, 2);
+        // textureLoad.LoadImage(fileData);
+        backgroundSpriteRenderer.sprite = Sprite.Create(img, new Rect(0, 0, img.width, img.height), new UnityEngine.Vector2(0.5f, 0.5f));
 
         currScene = scene;
         SetCurrentDialogue(currScene.dialogues[0]);
@@ -65,41 +66,34 @@ public class PageManager : MonoBehaviour {
         backgroundGameObject = GameObject.Find("Background");
         // TODO: Is there a better way to more immediately find this?
         foreach (Component comp in backgroundGameObject.GetComponents(typeof(SpriteRenderer))) {
-            backgroundSpriteRenderer = (SpriteRenderer) comp;
+            backgroundSpriteRenderer = (SpriteRenderer)comp;
             break;
         }
 
         Debug.Log("-+ Obtained sprite renderer. Initializing and loading scenes... -+");
-        DirectoryInfo dir = new DirectoryInfo("Assets/Frames");
 
-        string[] fileNames = {"ballad_1.jpg", "ballad_2.jpg", "ballad_3.jpg", "ballad_4.jpg"};
-		foreach (string fName in fileNames) 
-		{ 
+        string[] fileNames = { "ballad_1", "ballad_2", "ballad_3", "ballad_4" };
+        foreach (string fName in fileNames) {
             // Pull out the file path for SpriteRenderer and initialize object
-            FileInfo imgFile = new FileInfo("./Assets/Frames/" + fName);
-            string fileNameFull = imgFile.FullName;
-            SceneObj newScene = new SceneObj(fileNameFull);
+            SceneObj newScene = new SceneObj(fName);
 
-            // Pull out the file name base to get the associated text file of dialogues
-            // Leftover artifact when I was iterating over directory
-            string fileNameBase = fName.Split(".")[0];
+            // Pull out the associated text file of dialogues
             // TODO: Better way from directory object above? Or put these elsewhere for organization anyway?
-            FileInfo dialogueText = new FileInfo("./Assets/Frames/" + fileNameBase + ".txt");
-            StreamReader reader = dialogueText.OpenText();
-            string text = null;
-            while ((text = reader.ReadLine()) != null) {
-                newScene.dialogues.Add(text);
+
+            string textFile = Resources.Load<TextAsset>("Frames/" + fName).text;
+            foreach (string line in textFile.Split("\n")) {
+                if (line != "") newScene.dialogues.Add(line); // Skip the last empty newline. Classic.
             }
 
             // TODO: Do the same thing for the voice lines
-            
+
             // NOTE: This is just for the demo purposes, but we'd need some other flag for scenes that trigger actions
             // Many solutions to do that come to mind, but later (if ever)
-            if (fileNameBase == "ballad_3") {
+            if (fName == "ballad_3") {
                 newScene.hasEvent = true;
             }
             allScenes.Add(newScene);
-		}
+        }
         Debug.Log("-+ Scene manager setup complete. First scene loading. +-");
 
         SceneObj firstScene = allScenes[0];
